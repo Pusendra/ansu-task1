@@ -16,7 +16,11 @@ export default class Navbar extends Component {
             mode="horizontal"
             defaultSelectedKeys={["2"]}
           >
-            <Menu.Item key="1" className="long-item-logo">
+            <Menu.Item
+              key="1"
+              className="long-item-logo"
+              style={{ background: "#3f74a2" }}
+            >
               <Link to="/">
                 <img
                   src={logo}
@@ -31,9 +35,11 @@ export default class Navbar extends Component {
             <Menu.Item key="3" className="long-item">
               <Link to="/client">Client</Link>
             </Menu.Item>
+
             <Menu.Item key="4" className="long-item">
               <Link to="/company">Company</Link>
             </Menu.Item>
+
             <Menu.Item key="5" className="long-item">
               <Link to="/action">Action</Link>
             </Menu.Item>

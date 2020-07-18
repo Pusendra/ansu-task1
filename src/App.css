@@ -16,6 +16,10 @@
   color: var(--mainWhite);
 }
 
+.long-item:hover {
+  background: red;
+}
+
 .long-item-logo {
   width: 10%;
 }
