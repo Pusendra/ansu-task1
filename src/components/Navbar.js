@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Layout, Menu, Breadcrumb } from "antd";
+import { Layout, Menu } from "antd";
 import logo from "../images/logo.png";
 import { DownOutlined } from "@ant-design/icons";
 const { Header } = Layout;
@@ -14,7 +14,7 @@ export default class Navbar extends Component {
             theme="dark"
             style={{ background: "#3f74a2", color: "#fff" }}
             mode="horizontal"
-            defaultSelectedKeys={["2"]}
+            defaultSelectedKeys={["1"]}
           >
             <Menu.Item
               key="1"

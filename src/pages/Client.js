@@ -1,29 +1,209 @@
-import React from "react";
+import React, { Component } from "react";
 import ClientTable from "../tables/ClientTable";
 import { Layout } from "antd";
-
+import { Input } from "antd";
 import { Button } from "antd";
+import ExportJsonExcel from "js-export-excel";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { CSVLink } from "react-csv";
+import pdf from "../images/icons/pdf.png";
+import csv from "../images/icons/csv.png";
+import excel from "../images/icons/excel.png";
 
-export default function Client() {
-  const { Sider, Content } = Layout;
-  return (
-    <div>
-      <Layout className="function-info">
-        <Sider style={{ background: "#ffffff", textAlign: "center" }}>
-          <h1>User</h1>
-        </Sider>
-        <Content className="content-user">
-          <Button
-            type="primary"
-            shape="round"
-            size="large"
-            className="button button1"
+import { data } from "../tables/ClientTable";
+export default class Client extends Component {
+  state = { data: data };
+
+  downloadExcel = () => {
+    const data = this.state.data ? this.state.data : ""; //tabular data
+    var option = {};
+    let dataTable = [];
+    if (data) {
+      for (let i in data) {
+        if (data) {
+          let obj = {
+            SN: data[i].sn,
+            Name: data[i].name,
+            Contact: data[i].contact,
+            Address: data[i].address,
+            Issue_Date: data[i].issuedate,
+            Phase: data[i].phase,
+            Logo: data[i].logo,
+            Com_plan: data[i].complan,
+            User_plan: data[i].userplan,
+            Action: data[i].action,
+          };
+          dataTable.push(obj);
+        }
+      }
+    }
+    option.fileName = "Organization Information";
+    option.datas = [
+      {
+        sheetData: dataTable,
+        sheetName: "sheet",
+        sheetFilter: [
+          "SN",
+          "Name",
+          "Contact",
+          "Address",
+
+          "Issue Date",
+          "Phase",
+          "Logo",
+          "Com.plan",
+          "User Plan",
+          "Action",
+        ],
+        sheetHeader: [
+          "SN",
+          "Name",
+          "Contact",
+          "Address",
+
+          "Issue Date",
+          "Phase",
+          "Logo",
+          "Com.plan",
+          "User Plan",
+          "Action",
+        ],
+      },
+    ];
+
+    var toExcel = new ExportJsonExcel(option);
+    toExcel.saveExcel();
+  };
+
+  exportPDF = () => {
+    const unit = "pt";
+    const size = "A4"; // Use A1, A2, A3 or A4
+    const orientation = "portrait"; // portrait or landscape
+
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+
+    doc.setFontSize(15);
+
+    const title = "Organization Report";
+    const headers = [
+      [
+        "SN",
+        "Name",
+        "Contact",
+        "Address",
+
+        "Issue Date",
+        "Phase",
+        "Logo",
+        "Com.plan",
+        "User Plan",
+        "Action",
+      ],
+    ];
+
+    const data = this.state.data.map((elt) => [
+      elt.sn,
+      elt.name,
+      elt.contact,
+      elt.address,
+
+      elt.issuedate,
+      elt.phase,
+      elt.logo,
+      elt.complan,
+      elt.userplan,
+      elt.action,
+    ]);
+
+    let content = {
+      startY: 50,
+      head: headers,
+      body: data,
+    };
+
+    doc.text(title, marginLeft, 40);
+    doc.autoTable(content);
+    doc.save("report.pdf");
+  };
+
+  render() {
+    console.log(this.state);
+    const { Sider, Content } = Layout;
+    const { Search } = Input;
+
+    return (
+      <>
+        <Layout className="function-info">
+          <Sider
+            style={{
+              background: "#ffffff",
+              textAlign: "center",
+            }}
           >
-            Add Client
-          </Button>
-        </Content>
-      </Layout>
-      <ClientTable />
-    </div>
-  );
+            <h1>Client</h1>
+          </Sider>
+          <Content className="content-user">
+            <Button
+              type="primary"
+              shape="round"
+              size="large"
+              className="button button1"
+            >
+              Add Client
+            </Button>
+          </Content>
+        </Layout>
+        <Layout style={{ background: "#fff" }}>
+          <Content
+            style={{ background: "#fff", height: "3rem" }}
+            className="btn-content"
+          >
+            <Search
+              placeholder="input search text"
+              onSearch={(value) => console.log(value)}
+              style={{ width: 200 }}
+            />
+
+            <Button
+              onClick={() => this.exportPDF()}
+              className="second-user-header-height"
+            >
+              <img
+                onClick={() => this.exportPDF()}
+                src={pdf}
+                alt=""
+                style={{ height: "100%" }}
+                className="icon"
+              />
+            </Button>
+            <Button className="second-user-header-height">
+              <CSVLink data={this.state.data}>
+                <img
+                  src={csv}
+                  alt=""
+                  style={{ height: "100%" }}
+                  className="icon"
+                />
+              </CSVLink>
+            </Button>
+            <Button
+              onClick={this.downloadExcel}
+              className="second-user-header-height"
+            >
+              <img
+                onClick={this.downloadExcel}
+                src={excel}
+                alt=""
+                style={{ height: "100%" }}
+                className="icon"
+              />
+            </Button>
+          </Content>
+        </Layout>
+        <ClientTable />
+      </>
+    );
+  }
 }

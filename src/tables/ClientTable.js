@@ -159,3 +159,5 @@ export default class ClientTable extends Component {
     );
   }
 }
+
+export { data };

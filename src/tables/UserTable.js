@@ -84,6 +84,13 @@ const data = [
     role: "Developer",
     action: "develop apps",
   },
+  {
+    sn: "8",
+    name: "John Brown",
+    username: "Johnny",
+    role: "Developer",
+    action: "develop apps",
+  },
 ];
 export default class UserTable extends Component {
   render() {
